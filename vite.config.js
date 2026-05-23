@@ -54,6 +54,7 @@ function portfolioDataPlugin() {
 }
 
 export default defineConfig({
+  base: '/dev-monish-portfolio/',
   plugins: [react(), portfolioDataPlugin()],
   server: {
     watch: {
