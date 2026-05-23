@@ -45,7 +45,7 @@ function AdminGuard() {
 export default function App() {
   return (
     <PortfolioProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Toaster
           position="bottom-right"
           toastOptions={{
