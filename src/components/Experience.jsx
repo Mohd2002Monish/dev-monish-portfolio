@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Briefcase, Calendar } from 'lucide-react'
+import { Briefcase, Calendar, ArrowUpRight } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
 import FormattedDescription from './FormattedDescription'
 
@@ -9,55 +9,119 @@ export default function Experience() {
   const experiences = [...state.experiences].sort((a, b) => Number(b.year) - Number(a.year))
 
   return (
-    <section id="experience" className="py-24 relative overflow-hidden">
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-violet-600/5 rounded-full blur-3xl" />
+    <section id="experience" className="py-28 relative overflow-hidden">
+      {/* Background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at 10% 50%, rgba(147,51,234,0.07) 0%, transparent 55%)' }}
+      />
+      <div className="absolute inset-0 line-grid opacity-20 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="text-center mb-4"
         >
-          <h2 className="section-title">Work Experience</h2>
-          <p className="section-subtitle">My professional journey so far</p>
+          <div className="neon-tag mb-4 mx-auto w-fit">Experience</div>
+          <h2 className="section-title">My Journey</h2>
         </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="section-divider"
+        />
 
         <div className="max-w-3xl mx-auto">
+          {/* Animated timeline line */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            style={{
+              position: 'absolute',
+              left: '50%',
+              display: 'none',
+            }}
+          />
+
           {experiences.map((exp, i) => (
             <motion.div
               key={exp.id}
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
+              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="timeline-item"
             >
-              {/* Dot */}
-              <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 border-2 border-navy-900 shadow-lg shadow-violet-500/30" />
+              {/* Animated glowing dot */}
+              <motion.div
+                className="timeline-dot"
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 + 0.2, type: 'spring', stiffness: 200 }}
+                whileHover={{ scale: 1.4 }}
+              />
 
-              <div className="glass-card p-6 ml-4 hover:border-violet-500/30 transition-all duration-300 group">
-                {/* Year badge */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-600/15 border border-violet-500/20 text-violet-300 text-xs font-semibold mb-3">
-                  <Calendar size={11} />
-                  {exp.year}
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3">
-                  <h3 className="text-xl font-bold text-white">{exp.role}</h3>
-                  <span className="text-cyan-400 text-sm font-semibold flex items-center gap-1.5">
-                    <Calendar size={13} />
+              {/* Card */}
+              <motion.div
+                whileHover={{ x: 6, borderColor: 'rgba(147,51,234,0.4)' }}
+                className="glass-card p-6 ml-4 group transition-all duration-300"
+              >
+                {/* Year + Duration row */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                    style={{
+                      background: 'rgba(147,51,234,0.12)',
+                      border: '1px solid rgba(147,51,234,0.3)',
+                      color: '#c084fc',
+                    }}
+                  >
+                    <Calendar size={10} />
+                    {exp.year}
+                  </span>
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      background: 'rgba(6,182,212,0.1)',
+                      border: '1px solid rgba(6,182,212,0.25)',
+                      color: '#22d3ee',
+                    }}
+                  >
                     {exp.duration}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 mb-4">
-                  <Briefcase size={14} className="text-violet-400" />
-                  <span className="text-violet-300 font-semibold">{exp.company}</span>
+                {/* Role */}
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h3
+                    className="text-xl font-black text-white group-hover:text-violet-300 transition-colors"
+                    style={{ fontFamily: 'Outfit, sans-serif' }}
+                  >
+                    {exp.role}
+                  </h3>
+                  <ArrowUpRight
+                    size={18}
+                    className="text-gray-600 group-hover:text-violet-400 transition-colors mt-1 flex-shrink-0"
+                  />
                 </div>
 
-                <FormattedDescription text={exp.description} className="text-gray-400 text-sm" />
-              </div>
+                {/* Company */}
+                <div className="flex items-center gap-2 mb-4">
+                  <Briefcase size={13} style={{ color: '#c084fc' }} />
+                  <span className="font-semibold text-sm" style={{ color: '#c084fc' }}>{exp.company}</span>
+                </div>
+
+                <FormattedDescription text={exp.description} className="text-gray-400 text-sm leading-relaxed" />
+              </motion.div>
             </motion.div>
           ))}
         </div>

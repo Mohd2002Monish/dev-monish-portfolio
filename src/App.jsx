@@ -2,7 +2,12 @@ import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { PortfolioProvider } from './context/PortfolioContext'
+import { CometProvider } from './context/CometContext'
 
+import CustomCursor from './components/CustomCursor'
+import ScrollProgressBar from './components/ScrollProgressBar'
+import ParticleBackground from './components/ParticleBackground'
+import AuroraBackground from './components/AuroraBackground'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -45,6 +50,11 @@ function AdminGuard() {
 export default function App() {
   return (
     <PortfolioProvider>
+      <CometProvider>
+      <ScrollProgressBar />
+      <CustomCursor />
+      <AuroraBackground />
+      <ParticleBackground />
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Toaster
           position="bottom-right"
@@ -71,6 +81,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </CometProvider>
     </PortfolioProvider>
   )
 }

@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Code2, LayoutDashboard, Cpu, Briefcase, FolderOpen, Save, CheckCircle, ExternalLink } from 'lucide-react'
+import { LogOut, Code2, LayoutDashboard, Cpu, Briefcase, FolderOpen, Rocket, ExternalLink } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
 import SkillsManager from './SkillsManager'
 import ProjectsManager from './ProjectsManager'
 import ExperienceManager from './ExperienceManager'
+import CometManager from './CometManager'
 
 const tabs = [
-  { id: 'skills', label: 'Skills', icon: Cpu },
-  { id: 'projects', label: 'Projects', icon: FolderOpen },
+  { id: 'skills',     label: 'Skills',     icon: Cpu },
+  { id: 'projects',   label: 'Projects',   icon: FolderOpen },
   { id: 'experience', label: 'Experience', icon: Briefcase },
+  { id: 'comets',     label: 'Comets',     icon: Rocket },
 ]
 
 export default function AdminDashboard() {
@@ -30,9 +32,10 @@ export default function AdminDashboard() {
   }
 
   const counts = {
-    skills: state.skills.length,
-    projects: state.projects.length,
+    skills:     state.skills.length,
+    projects:   state.projects.length,
     experience: state.experiences.length,
+    comets:     '✦',
   }
 
   return (
@@ -130,9 +133,10 @@ export default function AdminDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
         >
-          {activeTab === 'skills' && <SkillsManager />}
-          {activeTab === 'projects' && <ProjectsManager />}
+          {activeTab === 'skills'     && <SkillsManager />}
+          {activeTab === 'projects'   && <ProjectsManager />}
           {activeTab === 'experience' && <ExperienceManager />}
+          {activeTab === 'comets'     && <CometManager />}
         </motion.div>
       </div>
     </div>
