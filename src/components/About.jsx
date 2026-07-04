@@ -3,6 +3,32 @@ import { motion } from 'framer-motion'
 import { Download, Zap, Cpu, Rocket, Brain, MapPin, Coffee, Code2 } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './SocialIcons'
 import { usePortfolio } from '../context/PortfolioContext'
+import NumberTicker from './NumberTicker'
+
+const RadarWidget = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl opacity-20 select-none">
+    {/* Concentric circles */}
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="w-48 h-48 rounded-full border border-violet-500/10 flex items-center justify-center animate-pulse">
+        <div className="w-32 h-32 rounded-full border border-violet-500/15 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full border border-violet-500/20 flex items-center justify-center" />
+        </div>
+      </div>
+    </div>
+    {/* Sweeper */}
+    <motion.div
+      className="absolute top-1/2 left-1/2 w-48 h-[1px] origin-left bg-gradient-to-r from-violet-500/30 to-transparent"
+      style={{ x: '0%', y: '-50%' }}
+      animate={{ rotate: 360 }}
+      transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+    />
+    {/* Target */}
+    <div className="absolute top-[45%] left-[60%] flex items-center justify-center">
+      <span className="absolute w-3.5 h-3.5 rounded-full bg-cyan-400/30 animate-ping" />
+      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" style={{ boxShadow: '0 0 8px #22d3ee' }} />
+    </div>
+  </div>
+)
 
 const bentoItems = [
   {
@@ -39,7 +65,7 @@ const bentoItems = [
         >
           <div
             className="w-full h-full rounded-[14px] flex items-center justify-center"
-            style={{ background: '#080d1a' }}
+            style={{ background: 'var(--admin-card-bg)' }}
           >
             <span className="text-4xl font-black" style={{ backgroundImage: 'linear-gradient(135deg, #c084fc, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontFamily: 'Outfit, sans-serif' }}>
               MM
@@ -64,7 +90,7 @@ const bentoItems = [
     cols: 1,
     rows: 1,
     content: () => (
-      <div className="flex flex-col justify-center h-full gap-4">
+      <div className="flex flex-col justify-center h-full gap-4 relative z-10">
         {[
           { label: 'Projects Shipped', value: '10+', color: '#c084fc' },
           { label: 'Years Coding', value: '3+', color: '#22d3ee' },
@@ -72,7 +98,7 @@ const bentoItems = [
           <div key={s.label} className="flex items-center justify-between">
             <span className="text-gray-400 text-sm">{s.label}</span>
             <span className="text-2xl font-black" style={{ color: s.color, fontFamily: 'Outfit, sans-serif', textShadow: `0 0 20px ${s.color}60` }}>
-              {s.value}
+              <NumberTicker value={s.value} />
             </span>
           </div>
         ))}
@@ -84,11 +110,12 @@ const bentoItems = [
     cols: 1,
     rows: 1,
     content: () => (
-      <div className="flex flex-col justify-between h-full">
-        <MapPin size={22} style={{ color: '#c084fc' }} />
-        <div>
+      <div className="flex flex-col justify-between h-full relative z-10">
+        <RadarWidget />
+        <MapPin size={22} style={{ color: '#c084fc' }} className="relative z-10" />
+        <div className="relative z-10">
           <div className="text-gray-500 text-xs uppercase tracking-widest mb-1">Based In</div>
-          <div className="text-white font-bold text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>India 🇮🇳</div>
+          <div className="text-white font-bold text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>India</div>
           <div className="text-gray-500 text-xs mt-1">Remote Friendly</div>
         </div>
       </div>
@@ -104,7 +131,7 @@ const bentoItems = [
         <div>
           <div className="text-gray-500 text-xs uppercase tracking-widest mb-1">Fun Fact</div>
           <div className="text-white font-semibold text-sm leading-relaxed">
-            I code better after midnight ☕ and debug best with lo-fi music 🎵
+            I code better after midnight and debug best with lo-fi music in the background.
           </div>
         </div>
       </div>
@@ -123,6 +150,14 @@ export default function About() {
   const { state } = usePortfolio()
   const { about } = state
 
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
+  }
+
   return (
     <section id="about" className="py-28 relative overflow-hidden">
       {/* Background */}
@@ -140,7 +175,7 @@ export default function About() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-4"
         >
           <div className="neon-tag mb-4 mx-auto w-fit">About Me</div>
@@ -150,11 +185,10 @@ export default function About() {
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
           className="section-divider"
         />
 
-        {/* BENTO GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           {bentoItems.map((item, i) => (
             <motion.div
@@ -162,9 +196,10 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              transition={{ duration: 0.4, delay: i * 0.04 }}
               whileHover={{ y: -4 }}
-              className={`bento-card ${item.id === 'role' ? 'lg:col-span-2' : ''} ${item.id === 'avatar' ? 'lg:row-span-2' : ''} min-h-[160px]`}
+              onMouseMove={handleMouseMove}
+              className={`bento-card spotlight-card ${item.id === 'role' ? 'lg:col-span-2' : ''} ${item.id === 'avatar' ? 'lg:row-span-2' : ''} min-h-[160px]`}
             >
               <item.content about={about} />
             </motion.div>
@@ -176,7 +211,7 @@ export default function About() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className="flex flex-wrap justify-center gap-3 mb-16"
         >
           <a href={about.github} target="_blank" rel="noreferrer" className="btn-primary flex items-center gap-2 text-sm py-2.5">
@@ -201,7 +236,7 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              transition={{ duration: 0.4, delay: i * 0.04 }}
               whileHover={{ y: -8, scale: 1.03 }}
               className="glass-card p-6 text-center flex flex-col items-center gap-3 transition-all duration-300"
               style={{ '--glow-color': color }}

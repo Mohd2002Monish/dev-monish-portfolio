@@ -3,16 +3,20 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { ArrowDown, Mail, Sparkles } from 'lucide-react'
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons'
-import heroBg from '../assets/hero-bg.png'
+import heroBgDark from '../assets/hero-bg.png'
+import heroBgLight from '../assets/hero-bg-light.png'
+import { usePortfolio } from '../context/PortfolioContext'
 
 const codeBubbles = [
-  { text: 'const dev = "Monish" 🚀', top: '18%', left: '5%', delay: 0.2, duration: 7 },
-  { text: 'npm run dev ✨', top: '72%', left: '3%', delay: 1.5, duration: 9 },
+  { text: 'const dev = "Monish"', top: '18%', left: '5%', delay: 0.2, duration: 7 },
+  { text: 'npm run dev --host', top: '72%', left: '3%', delay: 1.5, duration: 9 },
   { text: 'git push -u origin main', top: '28%', right: '4%', delay: 0.8, duration: 8 },
-  { text: '// TODO: Ship it 🔥', top: '65%', right: '3%', delay: 2, duration: 6 },
+  { text: '// TODO: ship && deploy', top: '65%', right: '3%', delay: 2, duration: 6 },
 ]
 
 export default function Hero() {
+  const { theme } = usePortfolio()
+  const heroBg = theme === 'light' ? heroBgLight : heroBgDark
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
@@ -24,11 +28,11 @@ export default function Hero() {
       ref={containerRef}
       className="relative min-h-screen flex items-center overflow-hidden"
     >
-      {/* ── Base Dark Background with subtle minimal ambient glows ── */}
+      {/* ── Base Background with subtle minimal ambient glows ── */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse at 50% 25%, rgba(147,51,234,0.08) 0%, transparent 60%), radial-gradient(ellipse at 50% 75%, rgba(6,182,212,0.05) 0%, transparent 60%), #05080f',
+          background: 'var(--hero-glow-bg)',
         }}
       />
 
@@ -95,7 +99,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1
               className="font-black leading-none tracking-tight"
@@ -121,7 +125,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
             className="flex items-center gap-3 text-xl md:text-2xl font-semibold text-gray-300"
           >
             <span className="text-gray-500">{'<'}</span>
@@ -155,7 +159,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
             className="text-gray-400 text-lg max-w-xl leading-relaxed"
           >
             Crafting beautiful, fast web experiences with modern tech.
@@ -173,7 +177,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.55 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
             className="flex flex-wrap justify-center gap-4 mt-2"
           >
             <motion.a
@@ -199,7 +203,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.65 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
             className="flex items-center gap-4 mt-3"
           >
             {[
@@ -238,7 +242,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.75 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
             className="flex flex-wrap justify-center gap-10 mt-6 pt-8 w-full max-w-md"
             style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
           >
@@ -252,7 +256,7 @@ export default function Hero() {
                 className="text-center"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.85 + i * 0.1, duration: 0.5 }}
+                transition={{ delay: 0.35 + i * 0.05, duration: 0.35 }}
               >
                 <div className="stat-number">{value}</div>
                 <div className="text-gray-500 text-xs mt-1 uppercase tracking-widest font-medium">{label}</div>
@@ -265,7 +269,7 @@ export default function Hero() {
             href="#about"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
             className="mt-10 flex flex-col items-center gap-2 text-gray-600 hover:text-gray-400 transition-colors group"
           >
             <span className="text-xs tracking-[0.3em] uppercase font-medium">Scroll</span>

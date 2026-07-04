@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useComet } from '../context/CometContext'
+import { usePortfolio } from '../context/PortfolioContext'
 
 /*  Starfield + Comet System
     ─────────────────────────
@@ -91,11 +92,15 @@ function spawnSparks(comet, sparkCount) {
 // ─── Main component ──────────────────────────────────────────────
 export default function StarfieldBackground() {
   const { settings } = useComet()
+  const { theme } = usePortfolio()
 
   // Use a ref so the animation loop always reads the latest settings
   // without needing to restart when they change
   const settingsRef = useRef(settings)
   useEffect(() => { settingsRef.current = settings }, [settings])
+
+  const themeRef = useRef(theme)
+  useEffect(() => { themeRef.current = theme }, [theme])
 
   const canvasRef = useRef(null)
 
@@ -188,9 +193,12 @@ export default function StarfieldBackground() {
           const sy = ((s.y + py) % h + h) % h
           const twinkle = 0.5 + 0.5 * Math.sin(time * s.twinkleSpeed + s.twinkleOffset)
           const alpha   = layer.alpha * (0.4 + twinkle * 0.6)
-          ctx.beginPath()
+           ctx.beginPath()
           ctx.arc(sx, sy, s.size, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(226,232,240,${alpha})`
+          const isLight = themeRef.current === 'light'
+          ctx.fillStyle = isLight 
+            ? `rgba(15, 23, 42, ${alpha * 0.4})`
+            : `rgba(226, 232, 240, ${alpha})`
           ctx.fill()
         }
       })

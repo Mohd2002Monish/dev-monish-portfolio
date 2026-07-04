@@ -85,7 +85,7 @@ export default function Contact() {
                 className="text-2xl font-black text-white mb-3"
                 style={{ fontFamily: 'Outfit, sans-serif' }}
               >
-                Let's Chat! 🚀
+                Let's Chat
               </h3>
               <p className="text-gray-400 leading-relaxed mb-5 text-sm">
                 I'm always open to discussing new projects, creative ideas, or opportunities. Don't be a stranger!
@@ -152,7 +152,7 @@ export default function Contact() {
               <form
                 onSubmit={handleSubmit}
                 className="rounded-2xl p-8 flex flex-col gap-5"
-                style={{ background: '#080d1a' }}
+                style={{ background: 'var(--admin-card-bg)' }}
               >
                 {submitted ? (
                   <motion.div
@@ -167,7 +167,7 @@ export default function Contact() {
                       <CheckCircle size={56} style={{ color: '#4ade80' }} />
                     </motion.div>
                     <h4 className="text-xl font-black text-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                      Message Sent! 🎉
+                      Message Sent
                     </h4>
                     <p className="text-gray-400 text-sm">Your email client opened. Thanks for reaching out!</p>
                   </motion.div>

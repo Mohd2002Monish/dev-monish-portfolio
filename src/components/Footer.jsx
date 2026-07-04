@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Mail, Zap, Heart, ArrowUp } from 'lucide-react'
 import { GithubIcon, LinkedinIcon, InstagramIcon, FacebookIcon } from './SocialIcons'
 import { usePortfolio } from '../context/PortfolioContext'
+import logo from '../assets/logo.png'
 
 export default function Footer() {
   const { state } = usePortfolio()
@@ -35,15 +36,14 @@ export default function Footer() {
             className="flex items-center gap-2.5 group"
             whileHover={{ scale: 1.05 }}
           >
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center"
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-9 h-9 object-contain rounded-lg"
               style={{
-                background: 'linear-gradient(135deg, #9333ea, #06b6d4)',
-                boxShadow: '0 0 20px rgba(147,51,234,0.5)',
+                boxShadow: '0 0 15px rgba(147,51,234,0.3)',
               }}
-            >
-              <Zap size={16} className="text-white" fill="white" />
-            </div>
+            />
             <span
               className="font-black text-white text-xl tracking-tight"
               style={{ fontFamily: 'Outfit, sans-serif' }}

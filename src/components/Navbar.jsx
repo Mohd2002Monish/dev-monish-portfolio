@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, FileText, Zap } from 'lucide-react'
+import { Menu, X, FileText, Zap, Sun, Moon } from 'lucide-react'
+import { usePortfolio } from '../context/PortfolioContext'
+import logo from '../assets/logo.png'
 
 const navLinks = [
   { href: '#home', label: 'Home' },
@@ -12,6 +14,8 @@ const navLinks = [
 ]
 
 export default function Navbar() {
+  const { state, theme, toggleTheme } = usePortfolio()
+  const settings = state.settings || { defaultTheme: 'dark', allowThemeToggle: true }
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
@@ -40,12 +44,12 @@ export default function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
       style={{
         background: scrolled
-          ? 'rgba(5, 8, 15, 0.85)'
+          ? 'var(--nav-bg)'
           : 'transparent',
         backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
-        boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.5)' : 'none',
+        borderBottom: scrolled ? '1px solid var(--nav-border)' : '1px solid transparent',
+        boxShadow: scrolled ? '0 4px 30px var(--nav-shadow)' : 'none',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,15 +60,14 @@ export default function Navbar() {
             className="flex items-center gap-2.5 group"
             whileHover={{ scale: 1.03 }}
           >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-8 h-8 object-contain rounded-lg"
               style={{
-                background: 'linear-gradient(135deg, #9333ea, #06b6d4)',
-                boxShadow: '0 0 15px rgba(147,51,234,0.5)',
+                boxShadow: '0 0 15px rgba(147,51,234,0.3)',
               }}
-            >
-              <Zap size={15} className="text-white" fill="white" />
-            </div>
+            />
             <span
               className="font-black text-white text-lg tracking-tight"
               style={{ fontFamily: 'Outfit, sans-serif' }}
@@ -100,6 +103,17 @@ export default function Navbar() {
 
           {/* Resume button */}
           <div className="hidden md:flex items-center gap-3">
+            {settings.allowThemeToggle && (
+              <motion.button
+                onClick={toggleTheme}
+                className="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-gray-400 hover:text-white transition-colors cursor-none"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              </motion.button>
+            )}
             <motion.a
               href="/Mohd_Monish.pdf"
               target="_blank"
@@ -144,10 +158,11 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="mobile-menu-container"
             style={{
               background: 'rgba(5, 8, 15, 0.95)',
               backdropFilter: 'blur(24px)',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              borderBottom: '1px solid var(--nav-border)',
             }}
           >
             <div className="px-4 py-4 flex flex-col gap-1">
@@ -164,6 +179,27 @@ export default function Navbar() {
                   {label}
                 </motion.a>
               ))}
+              {settings.allowThemeToggle && (
+                <motion.button
+                  onClick={toggleTheme}
+                  className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition-all text-sm font-medium border border-white/5 cursor-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <Sun size={14} />
+                      Light Mode
+                    </>
+                  ) : (
+                    <>
+                      <Moon size={14} />
+                      Dark Mode
+                    </>
+                  )}
+                </motion.button>
+              )}
               <motion.a
                 href="/Mohd_Monish.pdf"
                 target="_blank"

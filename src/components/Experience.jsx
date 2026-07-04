@@ -23,7 +23,7 @@ export default function Experience() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-4"
         >
           <div className="neon-tag mb-4 mx-auto w-fit">Experience</div>
@@ -33,7 +33,7 @@ export default function Experience() {
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
           className="section-divider"
         />
 
@@ -57,7 +57,7 @@ export default function Experience() {
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
               className="timeline-item"
             >
               {/* Animated glowing dot */}
@@ -66,7 +66,7 @@ export default function Experience() {
                 initial={{ scale: 0 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15 + 0.2, type: 'spring', stiffness: 200 }}
+                transition={{ delay: i * 0.05 + 0.1, type: 'spring', stiffness: 200 }}
                 whileHover={{ scale: 1.4 }}
               />
 

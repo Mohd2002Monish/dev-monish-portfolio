@@ -4,6 +4,7 @@ import { ExternalLink } from 'lucide-react'
 import { GithubIcon } from './SocialIcons'
 import { usePortfolio } from '../context/PortfolioContext'
 import FormattedDescription from './FormattedDescription'
+import LivePreviewModal from './LivePreviewModal'
 
 function ProjectImage({ src, title }) {
   const [errored, setErrored] = useState(false)
@@ -37,10 +38,11 @@ function TiltCard({ children, className }) {
   const cardRef = useRef(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotateX = useTransform(y, [-0.5, 0.5], ['8deg', '-8deg'])
-  const rotateY = useTransform(x, [-0.5, 0.5], ['-8deg', '8deg'])
+  const rotateX = useTransform(y, [-0.5, 0.5], ['5deg', '-5deg'])
+  const rotateY = useTransform(x, [-0.5, 0.5], ['-5deg', '5deg'])
 
   const handleMouseMove = (e) => {
+    if (!cardRef.current) return
     const rect = cardRef.current.getBoundingClientRect()
     const px = (e.clientX - rect.left) / rect.width - 0.5
     const py = (e.clientY - rect.top) / rect.height - 0.5
@@ -54,31 +56,60 @@ function TiltCard({ children, className }) {
   }
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      style={{ rotateX, rotateY, transformStyle: 'preserve-3d', transformOrigin: 'center center' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={className}
+      className={`${className} group`}
+      style={{ width: '100%', height: '100%' }}
     >
-      {children}
-    </motion.div>
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+          transformOrigin: 'center center',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
   )
 }
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.06 } },
 }
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
 }
 
 export default function Projects() {
   const { state } = usePortfolio()
   const { projects } = state
+  const [previewUrl, setPreviewUrl] = useState(null)
+  const [previewTitle, setPreviewTitle] = useState('')
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
+  }
+
+  const handleLiveClick = (e, project) => {
+    if (window.matchMedia('(pointer: fine)').matches) {
+      e.preventDefault()
+      setPreviewUrl(project.liveUrl)
+      setPreviewTitle(project.title)
+    }
+  }
 
   return (
     <section id="projects" className="py-28 relative overflow-hidden">
@@ -95,7 +126,7 @@ export default function Projects() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-4"
         >
           <div className="neon-tag mb-4 mx-auto w-fit">Portfolio</div>
@@ -105,7 +136,7 @@ export default function Projects() {
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
           className="section-divider"
         />
 
@@ -117,51 +148,28 @@ export default function Projects() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           style={{ perspective: '1200px' }}
         >
-          {projects.map((project) => (
+           {projects.map((project) => (
             <motion.div key={project.id} variants={cardVariants}>
               <TiltCard className="h-full">
                 <div
-                  className="project-card group flex flex-col h-full"
+                  onMouseMove={handleMouseMove}
+                  className="project-card spotlight-card flex flex-col h-full"
                   style={{ transformStyle: 'preserve-3d' }}
                 >
                   {/* Image */}
                   <div
                     className="relative overflow-hidden"
-                    style={{ aspectRatio: '16/9', background: '#080d1a' }}
+                    style={{ aspectRatio: '16/9', background: 'var(--admin-card-bg)' }}
                   >
                     <ProjectImage src={project.image} title={project.title} />
 
                     {/* Gradient shine on image */}
                     <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                       style={{ background: 'linear-gradient(135deg, rgba(147,51,234,0.2) 0%, transparent 60%)' }}
                     />
 
-                    {/* Hover overlay with CTA buttons */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-5 gap-3">
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="btn-primary flex items-center gap-1.5 text-xs py-2 px-4"
-                        >
-                          <ExternalLink size={12} />
-                          Live
-                        </a>
-                      )}
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="btn-outline flex items-center gap-1.5 text-xs py-2 px-4"
-                        >
-                          <GithubIcon size={12} />
-                          Code
-                        </a>
-                      )}
-                    </div>
+
 
                     {/* Neon corner accent */}
                     <div
@@ -198,23 +206,21 @@ export default function Projects() {
 
                     <FormattedDescription text={project.description} className="text-gray-400 text-sm flex-1 leading-relaxed" />
 
-                    {/* Footer links */}
+                    {/* Footer buttons */}
                     <div
-                      className="flex gap-4 pt-3"
-                      style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+                      className="flex gap-3 pt-4 mt-auto"
+                      style={{ borderTop: '1px solid var(--nav-border)' }}
                     >
                       {project.liveUrl && (
                         <a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1.5 text-sm font-medium transition-colors"
-                          style={{ color: '#22d3ee' }}
-                          onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
-                          onMouseLeave={e => e.currentTarget.style.color = '#22d3ee'}
+                          onClick={(e) => handleLiveClick(e, project)}
+                          className="btn-primary flex items-center justify-center gap-1.5 text-xs py-2 px-4 flex-1"
                         >
-                          <ExternalLink size={13} />
-                          Live Demo
+                          <ExternalLink size={12} />
+                          <span>Live</span>
                         </a>
                       )}
                       {project.githubUrl && (
@@ -222,10 +228,10 @@ export default function Projects() {
                           href={project.githubUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-white transition-colors font-medium"
+                          className="btn-outline flex items-center justify-center gap-1.5 text-xs py-2 px-4 flex-1"
                         >
-                          <GithubIcon size={13} />
-                          Source
+                          <GithubIcon size={12} />
+                          <span>Code</span>
                         </a>
                       )}
                     </div>
@@ -236,6 +242,14 @@ export default function Projects() {
           ))}
         </motion.div>
       </div>
+
+      {previewUrl && (
+        <LivePreviewModal
+          url={previewUrl}
+          title={previewTitle}
+          onClose={() => setPreviewUrl(null)}
+        />
+      )}
     </section>
   )
 }

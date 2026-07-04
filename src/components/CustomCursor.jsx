@@ -54,10 +54,6 @@ export default function CustomCursor() {
     const onMove = (e) => {
       pos.current = { x: e.clientX, y: e.clientY }
 
-      // Move the SVG cursor to the pointer
-      cursor.style.left = `${e.clientX}px`
-      cursor.style.top = `${e.clientY}px`
-
       // Spawn particles based on distance moved (not every frame)
       const dx = e.clientX - lastX
       const dy = e.clientY - lastY
@@ -95,6 +91,9 @@ export default function CustomCursor() {
 
     // Animation loop
     const animate = () => {
+      // Hardware-accelerated smooth cursor translation
+      cursor.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0) translate(-50%, -50%)`
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particles.current = particles.current.filter(p => p.alpha > 0.01)
@@ -160,10 +159,11 @@ export default function CustomCursor() {
         id="custom-cursor"
         style={{
           position: 'fixed',
+          left: 0,
+          top: 0,
           pointerEvents: 'none',
           zIndex: 99999,
-          transform: 'translate(-50%, -50%)',
-          transition: 'transform 0.1s ease',
+          transform: 'translate3d(-200px, -200px, 0) translate(-50%, -50%)',
         }}
       >
         <svg

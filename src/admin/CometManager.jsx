@@ -230,7 +230,7 @@ export default function CometManager() {
             animate={{ opacity: 1 }}
             className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"
           >
-            ⚠ At least one colour must be active for comets to appear.
+            Note: At least one colour must be active for comets to appear.
           </motion.p>
         )}
       </Section>

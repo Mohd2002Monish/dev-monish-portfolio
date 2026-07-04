@@ -92,7 +92,7 @@ export default function Skills() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-4"
         >
           <div className="neon-tag mb-4 mx-auto w-fit">Tech Stack</div>
@@ -102,7 +102,7 @@ export default function Skills() {
           initial={{ opacity: 0, scaleX: 0 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
           className="section-divider"
         />
 
@@ -110,7 +110,7 @@ export default function Skills() {
         <motion.div
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.06 } },
+            visible: { transition: { staggerChildren: 0.03 } },
           }}
           initial="hidden"
           whileInView="visible"
@@ -127,7 +127,7 @@ export default function Skills() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className="flex flex-wrap justify-center gap-5 mt-12"
         >
           {Object.entries(levelConfig).map(([level, cfg]) => (

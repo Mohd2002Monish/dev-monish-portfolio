@@ -21,6 +21,7 @@ function reducer(state, action) {
     case 'UPDATE_EXPERIENCE': return { ...state, experiences: state.experiences.map(e => e.id === action.payload.id ? action.payload : e) }
     case 'DELETE_EXPERIENCE': return { ...state, experiences: state.experiences.filter(e => e.id !== action.payload) }
     case 'UPDATE_ABOUT': return { ...state, about: { ...state.about, ...action.payload } }
+    case 'UPDATE_SETTINGS': return { ...state, settings: { ...state.settings, ...action.payload } }
     default: return state
   }
 }
@@ -67,8 +68,34 @@ export function PortfolioProvider({ children }) {
     await saveToFile(newState)
   }
 
+  const [theme, setTheme] = useState('dark')
+
+  useEffect(() => {
+    const settings = state.settings || { defaultTheme: 'dark', allowThemeToggle: true }
+    const saved = localStorage.getItem('portfolio_theme')
+    const initialTheme = (settings.allowThemeToggle && saved) ? saved : (settings.defaultTheme || 'dark')
+    setTheme(initialTheme)
+  }, [state.settings])
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'light') {
+      root.classList.add('light')
+    } else {
+      root.classList.remove('light')
+    }
+  }, [theme])
+
+  const toggleTheme = () => {
+    const settings = state.settings || { defaultTheme: 'dark', allowThemeToggle: true }
+    if (!settings.allowThemeToggle) return
+    const nextTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(nextTheme)
+    localStorage.setItem('portfolio_theme', nextTheme)
+  }
+
   return (
-    <PortfolioContext.Provider value={{ state, dispatch, dispatchAndSave, saving, loading }}>
+    <PortfolioContext.Provider value={{ state, dispatch, dispatchAndSave, saving, loading, theme, toggleTheme }}>
       {children}
     </PortfolioContext.Provider>
   )
