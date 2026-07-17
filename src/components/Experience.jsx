@@ -1,127 +1,54 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Briefcase, Calendar, ArrowUpRight } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
 import FormattedDescription from './FormattedDescription'
+import SectionHeader from './SectionHeader'
+
+const ease = [0.16, 1, 0.3, 1]
 
 export default function Experience() {
   const { state } = usePortfolio()
-  const experiences = [...state.experiences].sort((a, b) => Number(b.year) - Number(a.year))
+  const { experiences } = state
 
   return (
-    <section id="experience" className="py-28 relative overflow-hidden">
-      {/* Background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 10% 50%, rgba(147,51,234,0.07) 0%, transparent 55%)' }}
-      />
-      <div className="absolute inset-0 line-grid opacity-20 pointer-events-none" />
+    <section id="experience" className="x-section" style={{ background: 'var(--x-surface)' }}>
+      <div className="x-container">
+        <SectionHeader index="05" label="Experience" title="Where I've worked" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-4"
-        >
-          <div className="neon-tag mb-4 mx-auto w-fit">Experience</div>
-          <h2 className="section-title">My Journey</h2>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="section-divider"
-        />
-
-        <div className="max-w-3xl mx-auto">
-          {/* Animated timeline line */}
-          <motion.div
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
-            style={{
-              position: 'absolute',
-              left: '50%',
-              display: 'none',
-            }}
-          />
-
+        <div style={{ border: '1px solid var(--x-line-soft)', borderRadius: '3px', background: 'var(--x-bg)' }}>
           {experiences.map((exp, i) => (
             <motion.div
               key={exp.id}
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="timeline-item"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.55, delay: i * 0.05, ease }}
+              className="x-exp-row grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 p-6 md:p-9"
+              style={{ borderBottom: i < experiences.length - 1 ? '1px solid var(--x-line-soft)' : 'none' }}
             >
-              {/* Animated glowing dot */}
-              <motion.div
-                className="timeline-dot"
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 + 0.1, type: 'spring', stiffness: 200 }}
-                whileHover={{ scale: 1.4 }}
-              />
+              {/* Timeline meta */}
+              <div className="md:col-span-3 flex md:flex-col items-baseline md:items-start gap-3 md:gap-2">
+                <span className="font-mono text-xs font-medium" style={{ color: 'var(--x-accent)' }}>
+                  {exp.year}
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.16em]" style={{ color: 'var(--x-faint)' }}>
+                  {exp.duration}
+                </span>
+              </div>
 
-              {/* Card */}
-              <motion.div
-                whileHover={{ x: 6, borderColor: 'rgba(147,51,234,0.4)' }}
-                className="glass-card p-6 ml-4 group transition-all duration-300"
-              >
-                {/* Year + Duration row */}
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
-                    style={{
-                      background: 'rgba(147,51,234,0.12)',
-                      border: '1px solid rgba(147,51,234,0.3)',
-                      color: '#c084fc',
-                    }}
-                  >
-                    <Calendar size={10} />
-                    {exp.year}
-                  </span>
-                  <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium"
-                    style={{
-                      background: 'rgba(6,182,212,0.1)',
-                      border: '1px solid rgba(6,182,212,0.25)',
-                      color: '#22d3ee',
-                    }}
-                  >
-                    {exp.duration}
-                  </span>
+              {/* Details */}
+              <div className="md:col-span-9">
+                <h3
+                  className="font-grotesk font-bold text-lg md:text-xl mb-1"
+                  style={{ color: 'var(--x-text)', letterSpacing: '-0.01em' }}
+                >
+                  {exp.role}
+                </h3>
+                <div className="font-mono text-[11px] uppercase tracking-[0.16em] mb-5" style={{ color: 'var(--x-muted)' }}>
+                  {exp.company}
                 </div>
-
-                {/* Role */}
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3
-                    className="text-xl font-black text-white group-hover:text-violet-300 transition-colors"
-                    style={{ fontFamily: 'Outfit, sans-serif' }}
-                  >
-                    {exp.role}
-                  </h3>
-                  <ArrowUpRight
-                    size={18}
-                    className="text-gray-600 group-hover:text-violet-400 transition-colors mt-1 flex-shrink-0"
-                  />
-                </div>
-
-                {/* Company */}
-                <div className="flex items-center gap-2 mb-4">
-                  <Briefcase size={13} style={{ color: '#c084fc' }} />
-                  <span className="font-semibold text-sm" style={{ color: '#c084fc' }}>{exp.company}</span>
-                </div>
-
-                <FormattedDescription text={exp.description} className="text-gray-400 text-sm leading-relaxed" />
-              </motion.div>
+                <FormattedDescription text={exp.description} className="x-body text-sm" />
+              </div>
             </motion.div>
           ))}
         </div>

@@ -1,258 +1,144 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Download, Zap, Cpu, Rocket, Brain, MapPin, Coffee, Code2 } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from './SocialIcons'
+import { ArrowUpRight, Download } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
-import NumberTicker from './NumberTicker'
+import SectionHeader from './SectionHeader'
 
-const RadarWidget = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl opacity-20 select-none">
-    {/* Concentric circles */}
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="w-48 h-48 rounded-full border border-violet-500/10 flex items-center justify-center animate-pulse">
-        <div className="w-32 h-32 rounded-full border border-violet-500/15 flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full border border-violet-500/20 flex items-center justify-center" />
-        </div>
-      </div>
-    </div>
-    {/* Sweeper */}
-    <motion.div
-      className="absolute top-1/2 left-1/2 w-48 h-[1px] origin-left bg-gradient-to-r from-violet-500/30 to-transparent"
-      style={{ x: '0%', y: '-50%' }}
-      animate={{ rotate: 360 }}
-      transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-    />
-    {/* Target */}
-    <div className="absolute top-[45%] left-[60%] flex items-center justify-center">
-      <span className="absolute w-3.5 h-3.5 rounded-full bg-cyan-400/30 animate-ping" />
-      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" style={{ boxShadow: '0 0 8px #22d3ee' }} />
-    </div>
-  </div>
-)
+const ease = [0.16, 1, 0.3, 1]
 
-const bentoItems = [
-  {
-    id: 'role',
-    cols: 2,
-    rows: 1,
-    content: ({ about }) => (
-      <div className="flex flex-col justify-between h-full">
-        <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-          style={{ background: 'linear-gradient(135deg, #9333ea, #06b6d4)', boxShadow: '0 0 20px rgba(147,51,234,0.4)' }}
-        >
-          <Code2 size={22} className="text-white" />
-        </div>
-        <div>
-          <div className="text-gray-500 text-xs uppercase tracking-widest font-medium mb-1">Current Role</div>
-          <h3 className="text-2xl font-black text-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
-            Full Stack MERN Developer
-          </h3>
-          <p className="text-gray-400 text-sm mt-2 leading-relaxed line-clamp-3">{about.bio}</p>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'avatar',
-    cols: 1,
-    rows: 2,
-    content: () => (
-      <div className="flex flex-col items-center justify-center h-full gap-4">
-        <div
-          className="w-32 h-32 rounded-2xl p-[3px]"
-          style={{ background: 'linear-gradient(135deg, #9333ea, #06b6d4)', boxShadow: '0 0 30px rgba(147,51,234,0.5)' }}
-        >
-          <div
-            className="w-full h-full rounded-[14px] flex items-center justify-center"
-            style={{ background: 'var(--admin-card-bg)' }}
-          >
-            <span className="text-4xl font-black" style={{ backgroundImage: 'linear-gradient(135deg, #c084fc, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontFamily: 'Outfit, sans-serif' }}>
-              MM
-            </span>
-          </div>
-        </div>
-        <div className="text-center">
-          <div className="text-white font-bold text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>Mohd Monish</div>
-          <div
-            className="inline-flex items-center gap-1.5 mt-1.5 px-3 py-1 rounded-full text-xs font-semibold"
-            style={{ background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.3)', color: '#4ade80' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            Open to work
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'stats',
-    cols: 1,
-    rows: 1,
-    content: () => (
-      <div className="flex flex-col justify-center h-full gap-4 relative z-10">
-        {[
-          { label: 'Projects Shipped', value: '10+', color: '#c084fc' },
-          { label: 'Years Coding', value: '3+', color: '#22d3ee' },
-        ].map(s => (
-          <div key={s.label} className="flex items-center justify-between">
-            <span className="text-gray-400 text-sm">{s.label}</span>
-            <span className="text-2xl font-black" style={{ color: s.color, fontFamily: 'Outfit, sans-serif', textShadow: `0 0 20px ${s.color}60` }}>
-              <NumberTicker value={s.value} />
-            </span>
-          </div>
-        ))}
-      </div>
-    ),
-  },
-  {
-    id: 'location',
-    cols: 1,
-    rows: 1,
-    content: () => (
-      <div className="flex flex-col justify-between h-full relative z-10">
-        <RadarWidget />
-        <MapPin size={22} style={{ color: '#c084fc' }} className="relative z-10" />
-        <div className="relative z-10">
-          <div className="text-gray-500 text-xs uppercase tracking-widest mb-1">Based In</div>
-          <div className="text-white font-bold text-lg" style={{ fontFamily: 'Outfit, sans-serif' }}>India</div>
-          <div className="text-gray-500 text-xs mt-1">Remote Friendly</div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'fun',
-    cols: 1,
-    rows: 1,
-    content: () => (
-      <div className="flex flex-col justify-between h-full">
-        <Coffee size={22} style={{ color: '#22d3ee' }} />
-        <div>
-          <div className="text-gray-500 text-xs uppercase tracking-widest mb-1">Fun Fact</div>
-          <div className="text-white font-semibold text-sm leading-relaxed">
-            I code better after midnight and debug best with lo-fi music in the background.
-          </div>
-        </div>
-      </div>
-    ),
-  },
-]
-
-const superpowers = [
-  { icon: Zap, label: 'Responsive', desc: 'Pixel-perfect across all devices', color: '#c084fc' },
-  { icon: Cpu, label: 'Design', desc: 'Modern, beautiful interfaces', color: '#22d3ee' },
-  { icon: Rocket, label: 'Fast', desc: 'Performance-first development', color: '#f0abfc' },
-  { icon: Brain, label: 'Logical', desc: 'Clean, scalable code', color: '#a3e635' },
+const capabilities = [
+  { index: '01', label: 'Frontend Engineering', desc: 'React, Next.js — component systems that are fast, accessible and pixel-precise.' },
+  { index: '02', label: 'Backend & APIs', desc: 'Node.js, Express, microservices — REST APIs designed for scale and clarity.' },
+  { index: '03', label: 'AI Integration', desc: 'LLM-powered features, automation workflows and intelligent product tooling.' },
+  { index: '04', label: 'Infrastructure', desc: 'Docker, DigitalOcean, Cloudflare, Elasticsearch — production-ready deployments.' },
 ]
 
 export default function About() {
   const { state } = usePortfolio()
   const { about } = state
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
-  }
+  const specs = [
+    { k: 'Name', v: 'Mohd Monish' },
+    { k: 'Role', v: 'Full-Stack MERN Developer' },
+    { k: 'Location', v: 'India / Remote' },
+    { k: 'Experience', v: '3+ Years' },
+    { k: 'Status', v: 'Open to work', accent: true },
+    { k: 'Email', v: about.email, href: `mailto:${about.email}` },
+  ]
 
   return (
-    <section id="about" className="py-28 relative overflow-hidden">
-      {/* Background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at 80% 50%, rgba(147,51,234,0.06) 0%, transparent 60%)',
-        }}
-      />
-      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
+    <section id="about" className="x-section">
+      <div className="x-container">
+        <SectionHeader index="02" label="About" title="The developer behind the work" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-4"
-        >
-          <div className="neon-tag mb-4 mx-auto w-fit">About Me</div>
-          <h2 className="section-title">The Dev Behind The Code</h2>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="section-divider"
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          {/* Spec sheet */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.6, ease }}
+            className="lg:col-span-4"
+          >
+            <div className="lg:sticky lg:top-24">
+              <div style={{ border: '1px solid var(--x-line-soft)', borderRadius: '3px' }}>
+                <div
+                  className="px-5 py-3 font-mono text-[10px] uppercase tracking-[0.2em]"
+                  style={{ borderBottom: '1px solid var(--x-line-soft)', color: 'var(--x-faint)' }}
+                >
+                  Spec — MM.2026
+                </div>
+                {specs.map(({ k, v, accent, href }, i) => (
+                  <div
+                    key={k}
+                    className="flex items-baseline justify-between gap-4 px-5 py-3.5"
+                    style={{ borderBottom: i < specs.length - 1 ? '1px solid var(--x-line-soft)' : 'none' }}
+                  >
+                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] flex-shrink-0" style={{ color: 'var(--x-faint)' }}>
+                      {k}
+                    </span>
+                    {href ? (
+                      <a
+                        href={href}
+                        className="font-grotesk text-sm font-medium text-right break-all transition-colors duration-200"
+                        style={{ color: 'var(--x-text)' }}
+                        onMouseEnter={e => (e.currentTarget.style.color = 'var(--x-accent)')}
+                        onMouseLeave={e => (e.currentTarget.style.color = 'var(--x-text)')}
+                      >
+                        {v}
+                      </a>
+                    ) : (
+                      <span
+                        className="font-grotesk text-sm font-medium text-right"
+                        style={{ color: accent ? 'var(--x-accent)' : 'var(--x-text)' }}
+                      >
+                        {accent && <span className="inline-block w-1.5 h-1.5 rounded-full mr-2 align-middle" style={{ background: 'var(--x-accent)' }} />}
+                        {v}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {bentoItems.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 30 }}
+              <div className="flex flex-wrap gap-3 mt-6">
+                <a href={about.resumeUrl} target="_blank" rel="noreferrer" className="x-btn !py-3">
+                  <Download size={13} />
+                  Resume
+                </a>
+                <a href={about.github} target="_blank" rel="noreferrer" className="x-btn-ghost !py-3">
+                  GitHub
+                  <ArrowUpRight size={12} className="x-link-arrow" />
+                </a>
+                <a href={about.linkedin} target="_blank" rel="noreferrer" className="x-btn-ghost !py-3">
+                  LinkedIn
+                  <ArrowUpRight size={12} className="x-link-arrow" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bio + capabilities */}
+          <div className="lg:col-span-8">
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.04 }}
-              whileHover={{ y: -4 }}
-              onMouseMove={handleMouseMove}
-              className={`bento-card spotlight-card ${item.id === 'role' ? 'lg:col-span-2' : ''} ${item.id === 'avatar' ? 'lg:row-span-2' : ''} min-h-[160px]`}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: 0.08, ease }}
+              className="font-grotesk text-xl md:text-2xl leading-relaxed mb-14"
+              style={{ color: 'var(--x-text)', letterSpacing: '-0.01em' }}
             >
-              <item.content about={about} />
-            </motion.div>
-          ))}
-        </div>
+              {about.bio}
+            </motion.p>
 
-        {/* Action buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-3 mb-16"
-        >
-          <a href={about.github} target="_blank" rel="noreferrer" className="btn-primary flex items-center gap-2 text-sm py-2.5">
-            <GithubIcon size={15} />
-            GitHub
-          </a>
-          <a href={about.linkedin} target="_blank" rel="noreferrer" className="btn-outline flex items-center gap-2 text-sm py-2.5">
-            <LinkedinIcon size={15} />
-            LinkedIn
-          </a>
-          <a href={about.resumeUrl} target="_blank" rel="noreferrer" className="btn-outline flex items-center gap-2 text-sm py-2.5">
-            <Download size={15} />
-            Resume
-          </a>
-        </motion.div>
+            <div className="x-label mb-6">
+              <span className="x-label-index">→</span>
+              What I do
+            </div>
 
-        {/* Superpowers */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {superpowers.map(({ icon: Icon, label, desc, color }, i) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.04 }}
-              whileHover={{ y: -8, scale: 1.03 }}
-              className="glass-card p-6 text-center flex flex-col items-center gap-3 transition-all duration-300"
-              style={{ '--glow-color': color }}
-            >
-              <motion.div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                style={{ background: `${color}15`, border: `1px solid ${color}30` }}
-                whileHover={{ rotate: [0, -10, 10, 0] }}
-                transition={{ duration: 0.4 }}
-              >
-                <Icon size={24} style={{ color }} />
-              </motion.div>
-              <div className="font-bold text-white text-sm" style={{ fontFamily: 'Outfit, sans-serif' }}>{label}</div>
-              <div className="text-gray-500 text-xs leading-relaxed">{desc}</div>
-            </motion.div>
-          ))}
+            <div>
+              {capabilities.map(({ index, label, desc }, i) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: i * 0.06, ease }}
+                  className="x-exp-row grid grid-cols-12 gap-4 py-6 px-4 -mx-4"
+                  style={{ borderBottom: '1px solid var(--x-line-soft)' }}
+                >
+                  <span className="col-span-2 sm:col-span-1 font-mono text-xs pt-1" style={{ color: 'var(--x-accent)' }}>
+                    {index}
+                  </span>
+                  <span className="col-span-10 sm:col-span-4 font-grotesk font-semibold text-base" style={{ color: 'var(--x-text)' }}>
+                    {label}
+                  </span>
+                  <span className="col-span-10 col-start-3 sm:col-span-7 sm:col-start-6 x-body text-sm">
+                    {desc}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

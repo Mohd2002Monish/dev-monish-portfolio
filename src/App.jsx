@@ -4,10 +4,8 @@ import { Toaster } from 'react-hot-toast'
 import { PortfolioProvider } from './context/PortfolioContext'
 import { CometProvider } from './context/CometContext'
 
-import CustomCursor from './components/CustomCursor'
 import ScrollProgressBar from './components/ScrollProgressBar'
 import ParticleBackground from './components/ParticleBackground'
-import AuroraBackground from './components/AuroraBackground'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -52,25 +50,23 @@ export default function App() {
     <PortfolioProvider>
       <CometProvider>
       <ScrollProgressBar />
-      <CustomCursor />
-      <AuroraBackground />
       <ParticleBackground />
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Toaster
           position="bottom-right"
           toastOptions={{
             style: {
-              background: '#111d35',
-              color: '#e2e8f0',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
+              background: 'var(--x-surface)',
+              color: 'var(--x-text)',
+              border: '1px solid var(--x-line)',
+              borderRadius: '3px',
               fontSize: '14px',
             },
             success: {
-              iconTheme: { primary: '#06b6d4', secondary: '#0a0f1e' },
+              iconTheme: { primary: '#ff5c1a', secondary: '#0a0a0b' },
             },
             error: {
-              iconTheme: { primary: '#f87171', secondary: '#0a0f1e' },
+              iconTheme: { primary: '#f87171', secondary: '#0a0a0b' },
             },
           }}
         />

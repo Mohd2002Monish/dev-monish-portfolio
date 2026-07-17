@@ -9,8 +9,18 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         display: ['Outfit', 'sans-serif'],
+        grotesk: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
+        ink: {
+          bg: 'var(--x-bg)',
+          surface: 'var(--x-surface)',
+          text: 'var(--x-text)',
+          muted: 'var(--x-muted)',
+          faint: 'var(--x-faint)',
+          accent: 'var(--x-accent)',
+        },
         navy: {
           900: '#05080f',
           800: '#080d1a',

@@ -4,27 +4,27 @@ const STORAGE_KEY = 'comet_settings'
 
 export const DEFAULT_COMET_SETTINGS = {
   // Spawn
-  spawnIntervalMin: 14,   // frames
-  spawnIntervalMax: 42,
+  spawnIntervalMin: 90,   // frames
+  spawnIntervalMax: 240,
 
   // Motion
-  speedMin: 1.2,          // px/frame
-  speedMax: 3.0,
+  speedMin: 1.0,          // px/frame
+  speedMax: 2.2,
 
   // Appearance
-  tailLenMin: 80,
-  tailLenMax: 240,
-  headRadiusMin: 1.5,
-  headRadiusMax: 3.5,
+  tailLenMin: 60,
+  tailLenMax: 160,
+  headRadiusMin: 1.0,
+  headRadiusMax: 2.2,
 
   // Sparks
-  sparkCount: 13,         // avg
+  sparkCount: 6,          // avg
   sparkEnabled: true,
 
   // Colour palette (which palettes are active)
-  paletteViolet: true,
-  paletteCyan: true,
-  paletteFuchsia: true,
+  paletteViolet: false,
+  paletteCyan: false,
+  paletteFuchsia: false,
   paletteWhite: true,
 
   // Visibility

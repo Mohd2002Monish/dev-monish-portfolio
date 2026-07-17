@@ -14,8 +14,8 @@ export default function FormattedDescription({ text, className }) {
         // If line starts with a common bullet point marker
         if (trimmed.startsWith('-') || trimmed.startsWith('•') || trimmed.startsWith('*')) {
           return (
-            <div key={i} className="flex items-start gap-2 ml-1">
-              <span className="text-violet-400 mt-[2px] text-lg leading-none">•</span>
+            <div key={i} className="flex items-start gap-2.5 ml-1">
+              <span className="mt-[7px] w-1 h-1 flex-shrink-0" style={{ background: 'var(--x-accent)' }} />
               <span className="flex-1">{trimmed.substring(1).trim()}</span>
             </div>
           )

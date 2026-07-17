@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, Mail, CheckCircle, MessageSquare, Sparkles } from 'lucide-react'
-import { GithubIcon, LinkedinIcon, InstagramIcon, FacebookIcon } from './SocialIcons'
+import { ArrowUpRight, Check } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
+import SectionHeader from './SectionHeader'
+
+const ease = [0.16, 1, 0.3, 1]
 
 export default function Contact() {
   const { state } = usePortfolio()
   const { about } = state
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
-  const [focused, setFocused] = useState(null)
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
@@ -23,221 +24,159 @@ export default function Contact() {
   }
 
   const socials = [
-    { href: about.github, icon: GithubIcon, label: 'GitHub', color: '#c084fc' },
-    { href: about.linkedin, icon: LinkedinIcon, label: 'LinkedIn', color: '#22d3ee' },
-    { href: about.instagram, icon: InstagramIcon, label: 'Instagram', color: '#f0abfc' },
-    { href: about.facebook, icon: FacebookIcon, label: 'Facebook', color: '#60a5fa' },
-  ]
+    { href: about.github, label: 'GitHub' },
+    { href: about.linkedin, label: 'LinkedIn' },
+    { href: about.instagram, label: 'Instagram' },
+    { href: about.facebook, label: 'Facebook' },
+  ].filter(s => s.href)
 
   return (
-    <section id="contact" className="py-28 relative overflow-hidden">
-      {/* Background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 70% 80%, rgba(6,182,212,0.07) 0%, transparent 55%)' }}
-      />
-      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
+    <section id="contact" className="x-section">
+      <div className="x-container">
+        <SectionHeader index="06" label="Contact" title="Let's build something" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-4"
-        >
-          <div className="neon-tag mb-4 mx-auto w-fit">
-            <Sparkles size={12} />
-            Let's Connect
-          </div>
-          <h2 className="section-title">Get In Touch</h2>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="section-divider"
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-5xl mx-auto">
-          {/* Left: Info (2 cols) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-16">
+          {/* Left: pitch + email + socials */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-2 flex flex-col gap-5"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.6, ease }}
+            className="lg:col-span-5 flex flex-col"
           >
-            {/* CTA card with gradient border */}
-            <div
-              className="glass-card p-7"
-              style={{ border: '1px solid rgba(147,51,234,0.25)', boxShadow: '0 0 30px rgba(147,51,234,0.07)' }}
-            >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                style={{ background: 'linear-gradient(135deg, #9333ea, #06b6d4)', boxShadow: '0 0 20px rgba(147,51,234,0.4)' }}
-              >
-                <MessageSquare size={20} className="text-white" />
-              </div>
-              <h3
-                className="text-2xl font-black text-white mb-3"
-                style={{ fontFamily: 'Outfit, sans-serif' }}
-              >
-                Let's Chat
-              </h3>
-              <p className="text-gray-400 leading-relaxed mb-5 text-sm">
-                I'm always open to discussing new projects, creative ideas, or opportunities. Don't be a stranger!
-              </p>
-              <a
-                href={`mailto:${about.email}`}
-                className="flex items-center gap-3 group w-fit"
-              >
-                <Mail
-                  size={16}
-                  style={{ color: '#22d3ee' }}
-                  className="group-hover:scale-110 transition-transform"
-                />
-                <span
-                  className="font-medium text-sm transition-colors"
-                  style={{ color: '#22d3ee' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#67e8f9'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#22d3ee'}
-                >
-                  {about.email}
-                </span>
-              </a>
-            </div>
+            <p className="x-body text-[15px] mb-10 max-w-sm">
+              Have a project in mind, a role to fill, or just want to talk shop?
+              My inbox is always open — I usually reply within a day.
+            </p>
 
-            {/* Social links */}
-            <div className="glass-card p-5">
-              <p className="text-gray-500 text-xs font-medium mb-4 uppercase tracking-widest">Find Me On</p>
-              <div className="grid grid-cols-2 gap-3">
-                {socials.map(({ href, icon: Icon, label, color }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={label}
-                    className="flex items-center gap-2.5 p-3 rounded-xl transition-all duration-200"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
-                    whileHover={{ y: -3, scale: 1.03, borderColor: `${color}50`, backgroundColor: `${color}08` }}
+            <div className="x-label mb-3">
+              <span className="x-label-index">→</span>
+              Email
+            </div>
+            <a
+              href={`mailto:${about.email}`}
+              className="font-grotesk font-semibold break-all mb-12 transition-colors duration-200"
+              style={{ fontSize: 'clamp(1.15rem, 2.5vw, 1.6rem)', letterSpacing: '-0.01em', color: 'var(--x-text)' }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--x-accent)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--x-text)')}
+            >
+              {about.email}
+            </a>
+
+            <div className="x-label mb-4">
+              <span className="x-label-index">→</span>
+              Elsewhere
+            </div>
+            <div className="flex flex-col">
+              {socials.map(({ href, label }, i) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center justify-between py-3.5"
+                  style={{ borderBottom: i < socials.length - 1 ? '1px solid var(--x-line-soft)' : 'none' }}
+                >
+                  <span
+                    className="font-mono text-xs uppercase tracking-[0.16em] transition-colors duration-200 group-hover:!text-[var(--x-accent)]"
+                    style={{ color: 'var(--x-muted)' }}
                   >
-                    <Icon size={16} style={{ color }} />
-                    <span className="text-gray-400 text-sm font-medium">{label}</span>
-                  </motion.a>
-                ))}
-              </div>
+                    {label}
+                  </span>
+                  <ArrowUpRight
+                    size={14}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    style={{ color: 'var(--x-faint)' }}
+                  />
+                </a>
+              ))}
             </div>
           </motion.div>
 
-          {/* Right: Form (3 cols) */}
+          {/* Right: form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="lg:col-span-3"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.6, delay: 0.08, ease }}
+            className="lg:col-span-7"
           >
-            {/* Animated gradient border wrapper */}
             <div
-              className="p-[1.5px] rounded-2xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(147,51,234,0.5), rgba(6,182,212,0.5), rgba(217,70,239,0.3))',
-                boxShadow: '0 0 40px rgba(147,51,234,0.12)',
-              }}
+              className="p-7 md:p-10"
+              style={{ border: '1px solid var(--x-line-soft)', borderRadius: '3px', background: 'var(--x-surface)' }}
             >
-              <form
-                onSubmit={handleSubmit}
-                className="rounded-2xl p-8 flex flex-col gap-5"
-                style={{ background: 'var(--admin-card-bg)' }}
-              >
-                {submitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex flex-col items-center gap-4 py-12 text-center"
+              {submitted ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-start gap-4 py-14"
+                >
+                  <span
+                    className="w-11 h-11 flex items-center justify-center"
+                    style={{ border: '1px solid var(--x-accent-line)', color: 'var(--x-accent)', borderRadius: '2px' }}
                   >
-                    <motion.div
-                      animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <CheckCircle size={56} style={{ color: '#4ade80' }} />
-                    </motion.div>
-                    <h4 className="text-xl font-black text-white" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                      Message Sent
-                    </h4>
-                    <p className="text-gray-400 text-sm">Your email client opened. Thanks for reaching out!</p>
-                  </motion.div>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="text-xs font-semibold text-gray-400 mb-2 block uppercase tracking-widest" htmlFor="contact-name">
-                          Your Name
-                        </label>
-                        <input
-                          id="contact-name"
-                          type="text"
-                          name="name"
-                          value={form.name}
-                          onChange={handleChange}
-                          onFocus={() => setFocused('name')}
-                          onBlur={() => setFocused(null)}
-                          required
-                          placeholder="John Doe"
-                          className="form-input"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs font-semibold text-gray-400 mb-2 block uppercase tracking-widest" htmlFor="contact-email">
-                          Your Email
-                        </label>
-                        <input
-                          id="contact-email"
-                          type="email"
-                          name="email"
-                          value={form.email}
-                          onChange={handleChange}
-                          onFocus={() => setFocused('email')}
-                          onBlur={() => setFocused(null)}
-                          required
-                          placeholder="john@example.com"
-                          className="form-input"
-                        />
-                      </div>
-                    </div>
+                    <Check size={18} />
+                  </span>
+                  <h4 className="font-grotesk font-bold text-xl" style={{ color: 'var(--x-text)' }}>
+                    Message ready
+                  </h4>
+                  <p className="x-body text-sm">Your email client just opened — hit send and I'll get back to you soon.</p>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div>
-                      <label className="text-xs font-semibold text-gray-400 mb-2 block uppercase tracking-widest" htmlFor="contact-message">
-                        Message
+                      <label className="x-label !text-[10px] mb-1 block" htmlFor="contact-name">
+                        01 — Name
                       </label>
-                      <textarea
-                        id="contact-message"
-                        name="message"
-                        value={form.message}
+                      <input
+                        id="contact-name"
+                        type="text"
+                        name="name"
+                        value={form.name}
                         onChange={handleChange}
-                        onFocus={() => setFocused('message')}
-                        onBlur={() => setFocused(null)}
                         required
-                        rows={5}
-                        placeholder="Tell me about your project or just say hello..."
-                        className="form-input resize-none"
+                        placeholder="Your name"
+                        className="x-input"
                       />
                     </div>
-                    <motion.button
-                      type="submit"
-                      className="btn-primary flex items-center justify-center gap-2 py-4 text-base"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      <Send size={16} />
-                      Send Message
-                    </motion.button>
-                  </>
-                )}
-              </form>
+                    <div>
+                      <label className="x-label !text-[10px] mb-1 block" htmlFor="contact-email">
+                        02 — Email
+                      </label>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                        placeholder="you@example.com"
+                        className="x-input"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="x-label !text-[10px] mb-1 block" htmlFor="contact-message">
+                      03 — Message
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      value={form.message}
+                      onChange={handleChange}
+                      required
+                      rows={5}
+                      placeholder="Tell me about your project…"
+                      className="x-input resize-none"
+                    />
+                  </div>
+                  <button type="submit" className="x-btn self-start !px-10">
+                    Send Message
+                    <ArrowUpRight size={13} />
+                  </button>
+                </form>
+              )}
             </div>
           </motion.div>
         </div>

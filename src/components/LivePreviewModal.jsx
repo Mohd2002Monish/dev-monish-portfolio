@@ -21,86 +21,83 @@ export default function LivePreviewModal({ url, title, onClose }) {
     setKey((prev) => prev + 1)
   }
 
+  const iconBtnStyle = {
+    color: 'var(--x-muted)',
+    border: '1px solid var(--x-line-soft)',
+    borderRadius: '2px',
+  }
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 lg:p-10">
-        {/* Backdrop overlay */}
+        {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-navy-950/80 backdrop-blur-md cursor-none"
+          className="absolute inset-0 backdrop-blur-sm"
+          style={{ background: 'color-mix(in srgb, var(--x-bg) 80%, transparent)' }}
         />
 
-        {/* Modal Window */}
+        {/* Modal window */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.97, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          exit={{ opacity: 0, scale: 0.97, y: 16 }}
           transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-          className="relative w-full max-w-6xl h-[80vh] flex flex-col rounded-2xl border border-white/10 bg-[#080d1a]/95 shadow-2xl overflow-hidden z-10"
+          className="relative w-full max-w-6xl h-[80vh] flex flex-col overflow-hidden z-10"
+          style={{ background: 'var(--x-surface)', border: '1px solid var(--x-line)', borderRadius: '3px' }}
         >
-          {/* Mock Browser Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#0d1527] border-b border-white/5 select-none">
-            {/* macOS Dot Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={onClose}
-                aria-label="Close modal"
-                className="w-3.5 h-3.5 rounded-full bg-rose-500 hover:bg-rose-600 transition-colors flex items-center justify-center group cursor-none"
-              >
-                <X size={8} className="text-rose-950 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </button>
-              <div className="w-3.5 h-3.5 rounded-full bg-amber-500" />
-              <div className="w-3.5 h-3.5 rounded-full bg-emerald-500" />
-            </div>
+          {/* Header bar */}
+          <div
+            className="flex items-center justify-between gap-3 px-4 py-3 select-none"
+            style={{ borderBottom: '1px solid var(--x-line-soft)' }}
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] hidden sm:block" style={{ color: 'var(--x-faint)' }}>
+              Preview — {title}
+            </span>
 
-            {/* URL/Address Bar */}
-            <div className="flex-1 max-w-xl mx-4 flex items-center gap-2 px-4 py-1.5 rounded-lg bg-navy-900/60 border border-white/5 text-gray-400 text-xs font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            {/* Address bar */}
+            <div
+              className="flex-1 max-w-xl flex items-center gap-2 px-3 py-1.5 font-mono text-xs"
+              style={{ border: '1px solid var(--x-line-soft)', borderRadius: '2px', color: 'var(--x-muted)' }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0" style={{ background: 'var(--x-accent)' }} />
               <input
                 type="text"
                 readOnly
                 value={url}
-                className="w-full bg-transparent border-0 outline-none text-gray-400 cursor-text select-all"
+                className="w-full bg-transparent border-0 outline-none select-all"
+                style={{ color: 'var(--x-muted)' }}
               />
             </div>
 
-            {/* Window Actions */}
+            {/* Actions */}
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleRefresh}
-                title="Reload page"
-                className="p-1.5 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors cursor-none"
-              >
-                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+              <button onClick={handleRefresh} title="Reload page" className="p-1.5" style={iconBtnStyle}>
+                <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
               </button>
-              <a
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                title="Open in new tab"
-                className="p-1.5 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors cursor-none flex items-center justify-center"
-              >
-                <ExternalLink size={14} />
+              <a href={url} target="_blank" rel="noreferrer" title="Open in new tab" className="p-1.5 flex items-center justify-center" style={iconBtnStyle}>
+                <ExternalLink size={13} />
               </a>
-              <button
-                onClick={onClose}
-                title="Close"
-                className="p-1.5 rounded-lg hover:bg-white/5 text-gray-400 hover:text-rose-400 transition-colors cursor-none flex items-center justify-center"
-              >
-                <X size={15} />
+              <button onClick={onClose} title="Close" className="p-1.5 flex items-center justify-center" style={iconBtnStyle}>
+                <X size={14} />
               </button>
             </div>
           </div>
 
-          {/* Iframe Content Panel */}
-          <div className="relative flex-1 bg-navy-950 w-full h-full overflow-hidden">
+          {/* Iframe */}
+          <div className="relative flex-1 w-full h-full overflow-hidden" style={{ background: 'var(--x-bg)' }}>
             {loading && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#080d1a]/90 z-20">
-                <Loader2 size={28} className="text-violet-400 animate-spin" />
-                <span className="text-gray-400 text-xs tracking-wider uppercase font-medium">Connecting to {title}...</span>
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-20"
+                style={{ background: 'var(--x-surface)' }}
+              >
+                <Loader2 size={24} className="animate-spin" style={{ color: 'var(--x-accent)' }} />
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: 'var(--x-muted)' }}>
+                  Connecting to {title}…
+                </span>
               </div>
             )}
             <iframe

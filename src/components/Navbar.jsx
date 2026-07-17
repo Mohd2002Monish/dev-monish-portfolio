@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, FileText, Zap, Sun, Moon } from 'lucide-react'
+import { Menu, X, Sun, Moon, ArrowUpRight } from 'lucide-react'
 import { usePortfolio } from '../context/PortfolioContext'
-import logo from '../assets/logo.png'
 
 const navLinks = [
-  { href: '#home', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#home', label: 'Home', index: '01' },
+  { href: '#about', label: 'About', index: '02' },
+  { href: '#skills', label: 'Stack', index: '03' },
+  { href: '#projects', label: 'Work', index: '04' },
+  { href: '#experience', label: 'Experience', index: '05' },
+  { href: '#contact', label: 'Contact', index: '06' },
 ]
 
 export default function Navbar() {
@@ -22,11 +21,11 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+      setScrolled(window.scrollY > 40)
       const sections = navLinks.map(l => l.href.replace('#', ''))
       for (const sec of [...sections].reverse()) {
         const el = document.getElementById(sec)
-        if (el && window.scrollY >= el.offsetTop - 130) {
+        if (el && window.scrollY >= el.offsetTop - 140) {
           setActiveSection(sec)
           break
         }
@@ -38,115 +37,81 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -80, opacity: 0 }}
+      initial={{ y: -70, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
-        background: scrolled
-          ? 'var(--nav-bg)'
-          : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        borderBottom: scrolled ? '1px solid var(--nav-border)' : '1px solid transparent',
-        boxShadow: scrolled ? '0 4px 30px var(--nav-shadow)' : 'none',
+        background: scrolled ? 'color-mix(in srgb, var(--x-bg) 88%, transparent)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(16px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+        borderBottom: scrolled ? '1px solid var(--x-line-soft)' : '1px solid transparent',
+        transition: 'background-color 400ms, border-color 400ms',
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="x-container">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.a
-            href="#home"
-            className="flex items-center gap-2.5 group"
-            whileHover={{ scale: 1.03 }}
-          >
-            <img
-              src={logo}
-              alt="Logo"
-              className="w-8 h-8 object-contain rounded-lg"
-              style={{
-                boxShadow: '0 0 15px rgba(147,51,234,0.3)',
-              }}
+          {/* Wordmark */}
+          <a href="#home" className="flex items-center gap-2.5 group">
+            <span
+              className="w-2 h-2 flex-shrink-0"
+              style={{ background: 'var(--x-accent)' }}
             />
             <span
-              className="font-black text-white text-lg tracking-tight"
-              style={{ fontFamily: 'Outfit, sans-serif' }}
+              className="font-grotesk font-bold text-[15px] tracking-tight"
+              style={{ color: 'var(--x-text)', letterSpacing: '-0.02em' }}
             >
-              Mohd<span style={{ color: '#c084fc' }}>.</span>
+              MOHD&nbsp;MONISH
             </span>
-          </motion.a>
+          </a>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map(({ href, label }) => {
+          <div className="hidden md:flex items-center gap-7">
+            {navLinks.map(({ href, label, index }) => {
               const isActive = activeSection === href.replace('#', '')
               return (
-                <a
-                  key={href}
-                  href={href}
-                  className={`nav-link px-4 py-2 rounded-lg transition-all duration-200 ${
-                    isActive ? 'active text-white bg-white/5' : ''
-                  }`}
-                >
+                <a key={href} href={href} className={`x-nav-link ${isActive ? 'active' : ''}`}>
+                  <span className="x-nav-index">{index}</span>
                   {label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute bottom-0 left-0 w-full h-0.5 rounded-full"
-                      style={{ background: 'linear-gradient(90deg, #9333ea, #06b6d4)', boxShadow: '0 0 8px rgba(147,51,234,0.7)' }}
-                    />
-                  )}
                 </a>
               )
             })}
           </div>
 
-          {/* Resume button */}
+          {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             {settings.allowThemeToggle && (
-              <motion.button
+              <button
                 onClick={toggleTheme}
-                className="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-gray-400 hover:text-white transition-colors cursor-none"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="w-9 h-9 flex items-center justify-center transition-colors duration-200"
+                style={{ border: '1px solid var(--x-line)', color: 'var(--x-muted)', borderRadius: '2px' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--x-accent)'; e.currentTarget.style.borderColor = 'var(--x-accent-line)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--x-muted)'; e.currentTarget.style.borderColor = 'var(--x-line)' }}
                 aria-label="Toggle theme"
               >
-                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-              </motion.button>
+                {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              </button>
             )}
-            <motion.a
-              href="/Mohd_Monish.pdf"
+            <a
+              href={state.about.resumeUrl || '/Mohd_Monish.pdf'}
               target="_blank"
               rel="noreferrer"
-              className="btn-primary flex items-center gap-2 text-sm py-2 px-4"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              className="x-btn-ghost !py-2 !px-4"
             >
-              <FileText size={14} />
               Resume
-            </motion.a>
+              <ArrowUpRight size={12} className="x-link-arrow" />
+            </a>
           </div>
 
           {/* Mobile Toggle */}
-          <motion.button
-            className="md:hidden text-white p-2 rounded-lg transition-colors"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+          <button
+            className="md:hidden p-2"
+            style={{ border: '1px solid var(--x-line)', color: 'var(--x-text)', borderRadius: '2px' }}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
-            whileTap={{ scale: 0.92 }}
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={menuOpen ? 'x' : 'menu'}
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                {menuOpen ? <X size={20} /> : <Menu size={20} />}
-              </motion.div>
-            </AnimatePresence>
-          </motion.button>
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </div>
 
@@ -158,60 +123,50 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="mobile-menu-container"
+            className="md:hidden overflow-hidden"
             style={{
-              background: 'rgba(5, 8, 15, 0.95)',
-              backdropFilter: 'blur(24px)',
-              borderBottom: '1px solid var(--nav-border)',
+              background: 'var(--x-bg)',
+              borderBottom: '1px solid var(--x-line-soft)',
             }}
           >
-            <div className="px-4 py-4 flex flex-col gap-1">
-              {navLinks.map(({ href, label }, i) => (
+            <div className="x-container py-5 flex flex-col">
+              {navLinks.map(({ href, label, index }, i) => (
                 <motion.a
                   key={href}
                   href={href}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="text-gray-300 hover:text-white py-3 px-4 rounded-xl hover:bg-white/5 transition-all text-sm font-medium"
+                  transition={{ delay: i * 0.04 }}
+                  className="flex items-baseline gap-4 py-3.5"
+                  style={{ borderBottom: '1px solid var(--x-line-soft)' }}
                   onClick={() => setMenuOpen(false)}
                 >
-                  {label}
+                  <span className="font-mono text-[10px]" style={{ color: 'var(--x-accent)' }}>{index}</span>
+                  <span className="font-grotesk font-semibold text-2xl" style={{ color: 'var(--x-text)', letterSpacing: '-0.02em' }}>
+                    {label}
+                  </span>
                 </motion.a>
               ))}
-              {settings.allowThemeToggle && (
-                <motion.button
-                  onClick={toggleTheme}
-                  className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white transition-all text-sm font-medium border border-white/5 cursor-none"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.25 }}
+              <div className="flex items-center gap-3 pt-5">
+                <a
+                  href={state.about.resumeUrl || '/Mohd_Monish.pdf'}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="x-btn flex-1"
                 >
-                  {theme === 'dark' ? (
-                    <>
-                      <Sun size={14} />
-                      Light Mode
-                    </>
-                  ) : (
-                    <>
-                      <Moon size={14} />
-                      Dark Mode
-                    </>
-                  )}
-                </motion.button>
-              )}
-              <motion.a
-                href="/Mohd_Monish.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-primary flex items-center justify-center gap-2 mt-2 text-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <FileText size={14} />
-                Resume
-              </motion.a>
+                  Resume
+                  <ArrowUpRight size={12} />
+                </a>
+                {settings.allowThemeToggle && (
+                  <button
+                    onClick={toggleTheme}
+                    className="x-btn-ghost !px-4"
+                    aria-label="Toggle theme"
+                  >
+                    {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+                  </button>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
